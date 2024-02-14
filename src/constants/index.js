@@ -11,7 +11,7 @@ export const MODE_ID = {
 // Info text to show after click a mode
 export const INFO_TEXT = {
   delete: "Left click to delete mesh",
-  draw: "Left click to add points, right click to complete",
+  draw: "Left click to add points (minimum 3), right click to complete",
   extrude: "Click on shape to extrude (constant height of 0.5)",
   move: "Left click and drag on the extruded shape to move it",
   view: "Move using mouse, ctrl+click to pan",
