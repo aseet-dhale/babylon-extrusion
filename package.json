@@ -1,0 +1,22 @@
+{
+  "name": "babylon-assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx webpack serve",
+    "build": "npx webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^6.42.0",
+    "@babylonjs/materials": "^6.42.0",
+    "earcut": "^2.2.4"
+  }
+}
