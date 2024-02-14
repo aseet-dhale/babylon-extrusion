@@ -40,7 +40,7 @@ export class App {
   constructor(canvasId) {
     this.canvasId = canvasId;
     this.canvas = document.getElementById(canvasId);
-    this.engine = new Engine(this.canvas);
+    this.engine = new Engine(this.canvas, true, { stencil: true });
     this.scene = new Scene(this.engine);
     window.onresize = () => this.engine.resize();
     this.initScene();

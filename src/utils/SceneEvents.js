@@ -1,4 +1,10 @@
-import { Color3, MeshBuilder, Vector3, VertexBuffer } from "@babylonjs/core";
+import {
+  Color3,
+  HighlightLayer,
+  MeshBuilder,
+  Vector3,
+  VertexBuffer,
+} from "@babylonjs/core";
 import earcut from "earcut";
 import { MODE_ID } from "../constants";
 import {
@@ -19,9 +25,32 @@ export class SceneEvents {
   current = null;
   pickedMesh = null;
   pickedVertexBoxMesh = null;
+  // Highlighting layer
+  highlightLayer = null;
   constructor(app) {
     // Store a local copy of the app
     this.app = app;
+    this.highlightLayer = new HighlightLayer("highlightLayer", this.app.scene);
+  }
+
+  // Attach highlights on click if mode is move or vertex-edit
+  attachHighlights() {
+    if (
+      this.app.selectedMode === MODE_ID.MOVE ||
+      this.app.selectedMode === MODE_ID.VERTEX_EDIT
+    ) {
+      this.highlightLayer.addMesh(this.pickedMesh, Color3.Green());
+    }
+  }
+
+  // Remove highlights on click if mode is move or vertex-edit
+  removeHighlights() {
+    if (
+      this.app.selectedMode === MODE_ID.MOVE ||
+      this.app.selectedMode === MODE_ID.VERTEX_EDIT
+    ) {
+      this.highlightLayer.removeMesh(this.pickedMesh);
+    }
   }
 
   /**
@@ -35,6 +64,7 @@ export class SceneEvents {
       // If picked mesh is not ground set the starting drag position
       if (pickInfo.hit && pickInfo.pickedMesh.id !== "ground") {
         if (pickInfo.pickedMesh) this.pickedMesh = pickInfo.pickedMesh;
+        this.attachHighlights();
         this.startingPoint = getGroundPosition(this.app.scene);
         if (this.startingPoint) {
           // Detach camera for drag mode
@@ -78,6 +108,8 @@ export class SceneEvents {
         );
         this.app.selectedPointsMarkingSpheres.length = 0;
       }
+
+      this.removeHighlights();
     };
 
     this.app.scene.onPointerMove = (event, pickInfo) => {
@@ -262,7 +294,7 @@ export class SceneEvents {
           vector.addInPlace(diff);
         }
       });
-      // Convert shape to position data for updation
+      // Convert shape to position data for updating
       const position = getPositionFromShape(shape);
       // Set newly updated vertex data
       this.pickedMesh.setVerticesData(
